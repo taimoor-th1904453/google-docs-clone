@@ -3,10 +3,12 @@ import { useState, useEffect, useRef } from 'react'
 import ModalComponent from './modalComponent'
 import { addDoc, collection, onSnapshot } from 'firebase/firestore';
 
-
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Docs({ database }) {
+    let navigate = useNavigate();
+
 
     const [docsData, setDocsData] = useState([]);
     const [title, setTitle] = useState('')
@@ -48,6 +50,10 @@ export default function Docs({ database }) {
             })
     }
 
+    const getID = (id) => {
+        navigate(`/editDocs/${id}`)
+    }
+
     return (
         <div className='docs-main'>
             <p>Docs</p>
@@ -57,7 +63,7 @@ export default function Docs({ database }) {
             <div  className='grid-main'>
                 {docsData.map((doc) => {
                     return (
-                        <div key ={doc.title} className='grid-child'>
+                        <div key ={doc.title} className='grid-child' onClick={() => getID(doc.id)}>
                             <p>{doc.title}</p>
                         </div>
                     )
@@ -71,6 +77,5 @@ export default function Docs({ database }) {
                 addData={addData}
             />
         </div>
-        
     )
 }
