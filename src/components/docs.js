@@ -2,7 +2,6 @@ import React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import ModalComponent from './modalComponent'
 import { addDoc, collection, onSnapshot } from 'firebase/firestore';
-
 import { useNavigate } from 'react-router-dom';
 
 
@@ -12,7 +11,7 @@ export default function Docs({ database }) {
 
     const [docsData, setDocsData] = useState([]);
     const [title, setTitle] = useState('')
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
     const handleOpen = () => setOpen(true);
     const collectionRef = collection(database, 'docsData')
@@ -39,7 +38,8 @@ export default function Docs({ database }) {
 
     const addData = () => {
         addDoc(collectionRef, {
-            title: title
+            title: title,
+            docDesc: ''
         })
             .then(() => {
                 alert('Data Added')
@@ -57,7 +57,7 @@ export default function Docs({ database }) {
     return (
         <div className='docs-main'>
             <p>Docs</p>
-            <button className='add-docs'>
+            <button className='add-docs' onClick = {handleOpen}>
                 Add a Document
             </button>
             <div  className='grid-main'>
@@ -65,9 +65,13 @@ export default function Docs({ database }) {
                     return (
                         <div key ={doc.title} className='grid-child' onClick={() => getID(doc.id)}>
                             <p>{doc.title}</p>
+                            <div dangerouslySetInnerHTML={{__html: doc.docsDesc}} />
                         </div>
+                        
                     )
+                    
                 })}
+                
             </div>
             <ModalComponent 
                 open={open}
