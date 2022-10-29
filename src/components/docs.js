@@ -39,7 +39,7 @@ export default function Docs({ database }) {
     const addData = () => {
         addDoc(collectionRef, {
             title: title,
-            docDesc: ''
+            docsDesc: ''
         })
             .then(() => {
                 alert('Data Added')
