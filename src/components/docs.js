@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import ModalComponent from './modalComponent'
-import { addDoc, collection, onSnapshot } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, deleteDoc, doc} from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -27,14 +27,17 @@ export default function Docs({ database }) {
         })
     }
 
-    useEffect(() => {
-        if (isMounted.current) {
-            return
-        }
-        isMounted.current = true;
-        getData()
-    }, [])
+    const deleteDocData = (id) => {
+    const document = doc(collectionRef, id)
+        deleteDoc(document)
+        .then(() => {
+            console.log('Document Removed!')
+        })
+        .catch(() => {
+            alert('Cannot remove document')
+        })
 
+    }
 
     const addData = () => {
         addDoc(collectionRef, {
@@ -42,7 +45,7 @@ export default function Docs({ database }) {
             docsDesc: ''
         })
             .then(() => {
-                alert('Data Added')
+                console.log('Data Added')
                 handleClose()
             })
             .catch(() => {
@@ -54,24 +57,34 @@ export default function Docs({ database }) {
         navigate(`/editDocs/${id}`)
     }
 
+    useEffect(() => {
+        if (isMounted.current) {
+            return
+        }
+        isMounted.current = true;
+        getData()
+    }, [])
+
     return (
         <div className='docs-main'>
-            <p>Docs</p>
+            <p>Your Docs</p>
             <button className='add-docs' onClick = {handleOpen}>
                 Add a Document
             </button>
             <div  className='grid-main'>
                 {docsData.map((doc) => {
                     return (
-                        <div key ={doc.title} className='grid-child' onClick={() => getID(doc.id)}>
+                        <div  key ={doc.title} className='grid-child'>
+                            <div  onClick={() => getID(doc.id)}>
                             <p>{doc.title}</p>
                             <div dangerouslySetInnerHTML={{__html: doc.docsDesc}} />
+                            </div>
+                            <button  className='add-docs' onClick = {() => deleteDocData(doc.id)}>
+                         Delete Doc
+                        </button>
                         </div>
-                        
                     )
-                    
                 })}
-                
             </div>
             <ModalComponent 
                 open={open}
