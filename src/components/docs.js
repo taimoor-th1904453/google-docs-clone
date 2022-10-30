@@ -43,14 +43,17 @@ export default function Docs({ database }) {
         addDoc(collectionRef, {
             title: title,
             docsDesc: ''
-        })
+        }
+        )
+        handleClose()
             .then(() => {
                 console.log('Data Added')
-                handleClose()
+            
             })
             .catch(() => {
                 alert('Cannot add data')
             })
+          
     }
 
     const getID = (id) => {
@@ -77,7 +80,7 @@ export default function Docs({ database }) {
                         <div  key ={doc.title} className='grid-child'>
                             <div  onClick={() => getID(doc.id)}>
                             <p>{doc.title}</p>
-                            <div dangerouslySetInnerHTML={{__html: doc.docsDesc}} />
+                            {/* <div dangerouslySetInnerHTML={{__html: doc.docsDesc}} /> */}
                             </div>
                             <button  className='add-docs' onClick = {() => deleteDocData(doc.id)}>
                          Delete Doc
