@@ -45,15 +45,7 @@ export default function Docs({ database }) {
             docsDesc: ''
         }
         )
-        handleClose()
-            .then(() => {
-                console.log('Data Added')
-            
-            })
-            .catch(() => {
-                alert('Cannot add data')
-            })
-          
+        handleClose()          
     }
 
     const getID = (id) => {
